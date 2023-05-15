@@ -122,7 +122,6 @@ visible = false
 visible = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
-visible = false
 material = ExtResource( 3 )
 anchor_right = 1.0
 anchor_bottom = 1.0
