@@ -1,0 +1,130 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://root.gd" type="Script" id=1]
+[ext_resource path="res://snake_head.tscn" type="PackedScene" id=2]
+[ext_resource path="res://vhs.tres" type="Material" id=3]
+[ext_resource path="res://snake_part.tscn" type="PackedScene" id=4]
+[ext_resource path="res://step_timer.gd" type="Script" id=5]
+[ext_resource path="res://cells.tscn" type="PackedScene" id=6]
+[ext_resource path="res://warp_zone.tscn" type="PackedScene" id=7]
+[ext_resource path="res://interface.tscn" type="PackedScene" id=8]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 2, 22 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 2, 22 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 36, 2 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 36, 2 )
+
+[node name="Root" type="Node"]
+script = ExtResource( 1 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.501961, 0.752941, 0, 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="StepTimer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.6
+autostart = true
+script = ExtResource( 5 )
+
+[node name="MainScene" type="Node2D" parent="."]
+scale = Vector2( 13, 13 )
+
+[node name="Interface" parent="MainScene" instance=ExtResource( 8 )]
+snake_head = NodePath("../SnakeHead")
+
+[node name="WarpZone" parent="MainScene" instance=ExtResource( 7 )]
+left_wall_np = NodePath("LeftWall")
+right_wall_np = NodePath("RightWall")
+up_wall_np = NodePath("UpWall")
+down_wall_np = NodePath("DownWall")
+
+[node name="LeftWall" type="Area2D" parent="MainScene/WarpZone"]
+position = Vector2( 2, 30 )
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MainScene/WarpZone/LeftWall"]
+shape = SubResource( 1 )
+
+[node name="RightWall" type="Area2D" parent="MainScene/WarpZone"]
+position = Vector2( 78, 30 )
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MainScene/WarpZone/RightWall"]
+shape = SubResource( 2 )
+
+[node name="UpWall" type="Area2D" parent="MainScene/WarpZone"]
+position = Vector2( 40, 10 )
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MainScene/WarpZone/UpWall"]
+shape = SubResource( 3 )
+
+[node name="DownWall" type="Area2D" parent="MainScene/WarpZone"]
+position = Vector2( 40, 50 )
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MainScene/WarpZone/DownWall"]
+shape = SubResource( 4 )
+
+[node name="Cells" parent="MainScene" instance=ExtResource( 6 )]
+position = Vector2( 4, 12 )
+size_x = 18
+
+[node name="SnakeHead" parent="MainScene" instance=ExtResource( 2 )]
+position = Vector2( 42, 26 )
+snake_part = ExtResource( 4 )
+step_timer_np = NodePath("../../StepTimer")
+last_part_np = NodePath("../SnakePart")
+
+[node name="SnakePart" parent="MainScene" instance=ExtResource( 4 )]
+position = Vector2( 38, 26 )
+prev_part_np = NodePath("../SnakePart2")
+
+[node name="SnakePart2" parent="MainScene" instance=ExtResource( 4 )]
+position = Vector2( 34, 26 )
+prev_part_np = NodePath("../SnakePart3")
+next_part_np = NodePath("../SnakePart")
+
+[node name="SnakePart3" parent="MainScene" instance=ExtResource( 4 )]
+position = Vector2( 30, 26 )
+prev_part_np = NodePath("../SnakePart4")
+next_part_np = NodePath("../SnakePart2")
+
+[node name="SnakePart4" parent="MainScene" instance=ExtResource( 4 )]
+position = Vector2( 26, 26 )
+type = "Tail"
+step_timer_np = NodePath("../../StepTimer")
+next_part_np = NodePath("../SnakePart3")
+
+[node name="Body1" parent="MainScene/SnakePart4" index="1"]
+visible = false
+
+[node name="Tail1" parent="MainScene/SnakePart4" index="9"]
+visible = true
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+material = ExtResource( 3 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[editable path="MainScene/SnakePart4"]

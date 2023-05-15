@@ -1,0 +1,56 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://interface.gd" type="Script" id=1]
+[ext_resource path="res://assets/interface.png" type="Texture" id=2]
+[ext_resource path="res://assets/0.png" type="Texture" id=3]
+[ext_resource path="res://assets/2.png" type="Texture" id=4]
+[ext_resource path="res://assets/1.png" type="Texture" id=5]
+[ext_resource path="res://assets/3.png" type="Texture" id=6]
+[ext_resource path="res://assets/4.png" type="Texture" id=7]
+[ext_resource path="res://assets/5.png" type="Texture" id=8]
+[ext_resource path="res://assets/8.png" type="Texture" id=9]
+[ext_resource path="res://assets/6.png" type="Texture" id=10]
+[ext_resource path="res://assets/7.png" type="Texture" id=11]
+[ext_resource path="res://assets/9.png" type="Texture" id=12]
+
+[node name="Interface" type="Node2D"]
+script = ExtResource( 1 )
+n1 = NodePath("0")
+n2 = NodePath("1")
+n3 = NodePath("2")
+n4 = NodePath("3")
+t1 = ExtResource( 5 )
+t2 = ExtResource( 4 )
+t3 = ExtResource( 6 )
+t4 = ExtResource( 7 )
+t5 = ExtResource( 8 )
+t6 = ExtResource( 10 )
+t7 = ExtResource( 11 )
+t8 = ExtResource( 9 )
+t9 = ExtResource( 12 )
+t0 = ExtResource( 3 )
+
+[node name="InterfaceSprite" type="Sprite" parent="."]
+position = Vector2( 0, 4 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="0" type="Sprite" parent="."]
+position = Vector2( 3, 3 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="1" type="Sprite" parent="."]
+position = Vector2( 7, 3 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="2" type="Sprite" parent="."]
+position = Vector2( 11, 3 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="3" type="Sprite" parent="."]
+position = Vector2( 15, 3 )
+texture = ExtResource( 3 )
+centered = false

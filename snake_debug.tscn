@@ -1,0 +1,79 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://snake_head.tscn" type="PackedScene" id=3]
+[ext_resource path="res://snake_part.tscn" type="PackedScene" id=4]
+
+[node name="SnakeDebug" type="Node2D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.501961, 0.752941, 0, 1 )
+
+[node name="SnakeHead4" parent="." instance=ExtResource( 3 )]
+position = Vector2( 42, 2 )
+direction = 0
+
+[node name="SnakeHead2" parent="." instance=ExtResource( 3 )]
+position = Vector2( 13, 8 )
+direction = 2
+state = 1
+
+[node name="SnakeHead" parent="." instance=ExtResource( 3 )]
+position = Vector2( 12, 10 )
+
+[node name="SnakeHead3" parent="." instance=ExtResource( 3 )]
+position = Vector2( 14, 10 )
+direction = 3
+
+[node name="SnakePart5" parent="." instance=ExtResource( 4 )]
+position = Vector2( 19, 36 )
+
+[node name="SnakePart6" parent="." instance=ExtResource( 4 )]
+position = Vector2( 59, 31 )
+
+[node name="SnakePart14" parent="." instance=ExtResource( 4 )]
+position = Vector2( 55, 31 )
+
+[node name="SnakePart15" parent="." instance=ExtResource( 4 )]
+position = Vector2( 51, 31 )
+
+[node name="SnakePart16" parent="." instance=ExtResource( 4 )]
+position = Vector2( 47, 31 )
+
+[node name="SnakePart7" parent="." instance=ExtResource( 4 )]
+position = Vector2( 63, 27 )
+
+[node name="SnakePart8" parent="." instance=ExtResource( 4 )]
+position = Vector2( 63, 31 )
+
+[node name="SnakePart9" parent="." instance=ExtResource( 4 )]
+position = Vector2( 48, 40 )
+
+[node name="SnakePart10" parent="." instance=ExtResource( 4 )]
+position = Vector2( 42, 6 )
+direction = 0
+
+[node name="SnakePart11" parent="." instance=ExtResource( 4 )]
+position = Vector2( 42, 10 )
+direction = 0
+type = "Corner"
+next_part_np = NodePath("../SnakePart10")
+
+[node name="Body1" parent="SnakePart11" index="1"]
+visible = false
+
+[node name="SnakePart12" parent="." instance=ExtResource( 4 )]
+position = Vector2( 63, 23 )
+
+[node name="SnakePart13" parent="." instance=ExtResource( 4 )]
+position = Vector2( 38, 10 )
+next_part_np = NodePath("../SnakePart11")
+
+[node name="SnakePart17" parent="." instance=ExtResource( 4 )]
+position = Vector2( 43, 31 )
+
+[editable path="SnakePart11"]
