@@ -1,6 +1,7 @@
 tool
 extends Node2D
 
+signal eated(food)
 signal direction_changed
 
 const STEP_SIZE = 4
@@ -10,6 +11,8 @@ const DIRECTION_BOTTOM = 2
 const DIRECTION_LEFT = 3
 const STATE_NORMAL = 0
 const STATE_OPEN = 1
+const GROUP_FOOD = "food"
+const GROUP_SNAKE = "snake"
 
 export(int, "Up", "Right", "Bottom", "Left") var direction = 1 setget _on_direction_set
 export(int, "Normal", "Open") var state = 0 setget _on_state_set
@@ -36,6 +39,7 @@ var _direction_state = [
 	{"rotation": _vertical_rotate,  "scale": Vector2(1, -1), "nrotation": deg2rad(90)}, # Bottom
 	{"rotation": 0,   				"scale": Vector2(-1, 1), "nrotation": deg2rad(180)}, # Left
 ]
+var _have_food = false
 
 func _ready():
 	if not Engine.editor_hint:
@@ -83,15 +87,17 @@ func _on_step():
 	new_snake_part.set_next_part(self)
 	new_snake_part.position = position
 	new_snake_part.direction = _vec2dir(_prev_direction)
+	new_snake_part.head = self
 	
 	position += _direction * STEP_SIZE
 
 	_on_direction_set(_vec2dir(_direction))
 	
-	new_snake_part.update_type(direction)
+	new_snake_part.update_type(direction, _have_food)
 	
 	_parent.add_child(new_snake_part)
 	_last_part = new_snake_part
+	_have_food = false
 
 
 func _is_valid_direction():
@@ -122,16 +128,20 @@ func _update_state_display():
 	if state == STATE_NORMAL:
 		if Engine.editor_hint:
 			_sprite_open.hide()
-		elif _sprite_open.owner && not _sprite_default.owner:
-			remove_child(_sprite_open)
-			add_child(_sprite_default)
+		else:
+			if _sprite_open.is_inside_tree():
+				remove_child(_sprite_open)
+			if not _sprite_default.is_inside_tree():
+				add_child(_sprite_default)
 		_current_sprite = _sprite_default
 	elif state == STATE_OPEN:
 		if Engine.editor_hint:
 			_sprite_default.hide()
-		elif _sprite_default.owner && not _sprite_open.owner:
-			remove_child(_sprite_default)
-			add_child(_sprite_open)
+		else:
+			if _sprite_default.is_inside_tree():
+				remove_child(_sprite_default)
+			if not _sprite_open.is_inside_tree():
+				add_child(_sprite_open)
 		_current_sprite = _sprite_open
 		
 	_current_sprite.show()
@@ -177,3 +187,12 @@ func _on_nose_area_entered(_area):
 
 func _on_nose_area_exited(_area):
 	_on_state_set(STATE_NORMAL)
+
+
+func _on_collider_area_entered(area):
+	if area.is_in_group(GROUP_FOOD):
+		emit_signal("eated", area)
+		area.eat()
+		_have_food = true
+	elif area.is_in_group(GROUP_SNAKE):
+		_step_timer.game_over()

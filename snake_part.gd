@@ -1,5 +1,5 @@
 tool
-extends Node2D
+extends Area2D
 
 const DIRECTION_UP = 0
 const DIRECTION_RIGHT = 1
@@ -17,18 +17,24 @@ export(String, "Body", "BodyBola", "Tail", "Corner", "CornerBola") var type = "B
 export(NodePath) var step_timer_np
 export(NodePath) var prev_part_np
 export(NodePath) var next_part_np
+export(NodePath) var head_np
 
 onready var step_timer = (get_node(step_timer_np) if not Engine.editor_hint and step_timer_np else null)
 onready var ready_marker = true # без него сеттеры будут сыпатся
 
 var prev_part
 var next_part
+var head
 var sprites = []
 
+var _skip_die = false
 
 func _ready():
+	if head_np != "" and not head:
+		head = get_node(head_np)
+	
 	if not Engine.editor_hint && type == TYPE_TAIL:
-		_connect_die_timeout()
+		convert_to_tail()
 
 	for ch in get_children():
 		if ch.name != "Collider":
@@ -41,6 +47,10 @@ func _ready():
 		next_part = get_node(next_part_np)
 
 	update_design()
+
+
+func _exit_tree():
+	_clean()
 
 
 func set_prev_part(_prev_part):
@@ -65,12 +75,12 @@ func update_design():
 	for sprite in sprites:
 		if sprite_name == sprite.name:
 			sprite.show()
-			if not sprite.owner:
+			if not sprite.is_inside_tree():
 				add_child(sprite)
 		else:
 			if Engine.editor_hint:
 				sprite.hide()
-			elif sprite.owner:
+			elif sprite.is_inside_tree():
 				remove_child(sprite)
 
 
@@ -81,6 +91,7 @@ func convert_to_tail():
 	
 	prev_part = null
 	_connect_die_timeout()
+	head.connect("eated", self, "_on_head_eat")
 
 
 func update_type(next_direction, bola = false):
@@ -97,6 +108,15 @@ func update_type(next_direction, bola = false):
 
 
 func _die():
+	if _skip_die:
+		_skip_die = false
+		return
+
+	_clean()
+	
+	head.disconnect("eated", self, "_on_head_eat")
+	step_timer.disconnect("timeout", self, "_die")
+	
 	next_part.step_timer = step_timer
 	next_part.convert_to_tail()
 	queue_free()
@@ -104,7 +124,7 @@ func _die():
 
 func _connect_die_timeout():
 	if !prev_part && step_timer:
-		step_timer.connect("timeout", self, "_die", [], CONNECT_ONESHOT)
+		step_timer.connect("timeout", self, "_die")
 
 
 func _on_direction_set(value):
@@ -125,3 +145,13 @@ func _on_type_set(value):
 	
 	if ready_marker:
 		update_design()
+
+
+func _on_head_eat(_food):
+	_skip_die = true
+
+
+func _clean():
+	sprites = []
+	for sp in sprites:
+		sp.queue_free()

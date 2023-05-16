@@ -1,0 +1,28 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://assets/time_bonus_4.png" type="Texture" id=1]
+[ext_resource path="res://food.gd" type="Script" id=2]
+[ext_resource path="res://assets/time_bonus_5.png" type="Texture" id=3]
+[ext_resource path="res://assets/time_bonus_6.png" type="Texture" id=4]
+[ext_resource path="res://assets/time_bonus_1.png" type="Texture" id=5]
+[ext_resource path="res://assets/time_bonus_2.png" type="Texture" id=6]
+[ext_resource path="res://assets/time_bonus_3.png" type="Texture" id=7]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 3, 1.5 )
+
+[node name="FoodBonus" type="Area2D" groups=["food"]]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource( 2 )
+variants = [ ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 1 ), ExtResource( 3 ), ExtResource( 4 ) ]
+score_cost = 5
+die_timeout = 20
+autostart = true
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )

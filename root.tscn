@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://root.gd" type="Script" id=1]
 [ext_resource path="res://snake_head.tscn" type="PackedScene" id=2]
@@ -8,6 +8,9 @@
 [ext_resource path="res://cells.tscn" type="PackedScene" id=6]
 [ext_resource path="res://warp_zone.tscn" type="PackedScene" id=7]
 [ext_resource path="res://interface.tscn" type="PackedScene" id=8]
+[ext_resource path="res://food_generator.gd" type="Script" id=9]
+[ext_resource path="res://food.tscn" type="PackedScene" id=10]
+[ext_resource path="res://food_bonus.tscn" type="PackedScene" id=11]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 2, 22 )
@@ -35,17 +38,26 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="StepTimer" type="Timer" parent="."]
+[node name="MainScene" type="Node2D" parent="."]
+scale = Vector2( 13, 13 )
+
+[node name="StepTimer" type="Timer" parent="MainScene"]
 process_mode = 0
 wait_time = 0.6
 autostart = true
 script = ExtResource( 5 )
 
-[node name="MainScene" type="Node2D" parent="."]
-scale = Vector2( 13, 13 )
+[node name="FoodGenerator" type="Node2D" parent="MainScene"]
+position = Vector2( 4, 12 )
+script = ExtResource( 9 )
+cells_np = NodePath("../Cells")
+step_timer_np = NodePath("../StepTimer")
+interface_np = NodePath("../Interface")
+food = ExtResource( 10 )
+bonus = ExtResource( 11 )
 
 [node name="Interface" parent="MainScene" instance=ExtResource( 8 )]
-snake_head = NodePath("../SnakeHead")
+snake_head_np = NodePath("../SnakeHead")
 
 [node name="WarpZone" parent="MainScene" instance=ExtResource( 7 )]
 left_wall_np = NodePath("LeftWall")
@@ -92,28 +104,32 @@ size_x = 18
 [node name="SnakeHead" parent="MainScene" instance=ExtResource( 2 )]
 position = Vector2( 42, 26 )
 snake_part = ExtResource( 4 )
-step_timer_np = NodePath("../../StepTimer")
+step_timer_np = NodePath("../StepTimer")
 last_part_np = NodePath("../SnakePart")
 
 [node name="SnakePart" parent="MainScene" instance=ExtResource( 4 )]
 position = Vector2( 38, 26 )
 prev_part_np = NodePath("../SnakePart2")
+head_np = NodePath("../SnakeHead")
 
 [node name="SnakePart2" parent="MainScene" instance=ExtResource( 4 )]
 position = Vector2( 34, 26 )
 prev_part_np = NodePath("../SnakePart3")
 next_part_np = NodePath("../SnakePart")
+head_np = NodePath("../SnakeHead")
 
 [node name="SnakePart3" parent="MainScene" instance=ExtResource( 4 )]
 position = Vector2( 30, 26 )
 prev_part_np = NodePath("../SnakePart4")
 next_part_np = NodePath("../SnakePart2")
+head_np = NodePath("../SnakeHead")
 
 [node name="SnakePart4" parent="MainScene" instance=ExtResource( 4 )]
 position = Vector2( 26, 26 )
 type = "Tail"
-step_timer_np = NodePath("../../StepTimer")
+step_timer_np = NodePath("../StepTimer")
 next_part_np = NodePath("../SnakePart3")
+head_np = NodePath("../SnakeHead")
 
 [node name="Body1" parent="MainScene/SnakePart4" index="1"]
 visible = false
@@ -122,6 +138,7 @@ visible = false
 visible = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
+visible = false
 material = ExtResource( 3 )
 anchor_right = 1.0
 anchor_bottom = 1.0

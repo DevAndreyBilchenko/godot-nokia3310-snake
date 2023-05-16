@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://interface.gd" type="Script" id=1]
 [ext_resource path="res://assets/interface.png" type="Texture" id=2]
@@ -12,13 +12,15 @@
 [ext_resource path="res://assets/6.png" type="Texture" id=10]
 [ext_resource path="res://assets/7.png" type="Texture" id=11]
 [ext_resource path="res://assets/9.png" type="Texture" id=12]
+[ext_resource path="res://assets/time_bonus_1.png" type="Texture" id=13]
 
 [node name="Interface" type="Node2D"]
 script = ExtResource( 1 )
-n1 = NodePath("0")
-n2 = NodePath("1")
-n3 = NodePath("2")
-n4 = NodePath("3")
+score_numbers_np = NodePath("NumberPack")
+bonus_np = NodePath("Bonus")
+bonus_timer_np = NodePath("BonusTimer")
+bonus_texture_np = NodePath("Bonus/Sprite")
+bonus_numbers_np = NodePath("Bonus/NumberPack")
 t1 = ExtResource( 5 )
 t2 = ExtResource( 4 )
 t3 = ExtResource( 6 )
@@ -30,27 +32,49 @@ t8 = ExtResource( 9 )
 t9 = ExtResource( 12 )
 t0 = ExtResource( 3 )
 
+[node name="BonusTimer" type="Timer" parent="."]
+
 [node name="InterfaceSprite" type="Sprite" parent="."]
 position = Vector2( 0, 4 )
 texture = ExtResource( 2 )
 centered = false
 
-[node name="0" type="Sprite" parent="."]
+[node name="NumberPack" type="Node2D" parent="."]
+
+[node name="0" type="Sprite" parent="NumberPack"]
 position = Vector2( 3, 3 )
 texture = ExtResource( 3 )
 centered = false
 
-[node name="1" type="Sprite" parent="."]
+[node name="1" type="Sprite" parent="NumberPack"]
 position = Vector2( 7, 3 )
 texture = ExtResource( 3 )
 centered = false
 
-[node name="2" type="Sprite" parent="."]
+[node name="2" type="Sprite" parent="NumberPack"]
 position = Vector2( 11, 3 )
 texture = ExtResource( 3 )
 centered = false
 
-[node name="3" type="Sprite" parent="."]
+[node name="3" type="Sprite" parent="NumberPack"]
 position = Vector2( 15, 3 )
 texture = ExtResource( 3 )
 centered = false
+
+[node name="Bonus" type="Node2D" parent="."]
+visible = false
+
+[node name="NumberPack" type="Node2D" parent="Bonus"]
+position = Vector2( 65, 6 )
+
+[node name="0" type="Sprite" parent="Bonus/NumberPack"]
+position = Vector2( 7, 0 )
+texture = ExtResource( 3 )
+
+[node name="1" type="Sprite" parent="Bonus/NumberPack"]
+position = Vector2( 11, 0 )
+texture = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="Bonus"]
+position = Vector2( 65, 6 )
+texture = ExtResource( 13 )

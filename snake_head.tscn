@@ -41,5 +41,6 @@ monitorable = false
 position = Vector2( 4, 0 )
 shape = SubResource( 2 )
 
+[connection signal="area_entered" from="Collider" to="." method="_on_collider_area_entered"]
 [connection signal="area_entered" from="Nose" to="." method="_on_nose_area_entered"]
 [connection signal="area_exited" from="Nose" to="." method="_on_nose_area_exited"]
